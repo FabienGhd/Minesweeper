@@ -64,11 +64,11 @@ public class projet_demineur {
 			}
 		}
 		
-		for(int i = 0; i < T.length; i++) { //just for printing, les cases avec -1 contiennent une bombe, 0 ne contient pas de bombes
-			for(int j = 0; j < T[i].length; j++) {
-				System.out.print(Tadj[i][j] + " ");
-			}System.out.println();
-		}
+		//for(int i = 0; i < T.length; i++) { //just for printing, les cases avec -1 contiennent une bombe, 0 ne contient pas de bombes
+			//for(int j = 0; j < T[i].length; j++) {
+			//	System.out.print(Tadj[i][j] + " ");
+		//	}System.out.println();
+		//}
 	}
 
 	// Question 1.c] Fonction caseCorrecte
@@ -104,8 +104,47 @@ public class projet_demineur {
 	//
 
 	// Question 2.a]
+<<<<<<< HEAD
 	public static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
 
+=======
+	
+	public static void charCase(int i, int j) {
+		// ??
+	}
+	
+	public static void afficherGrille(boolean affMines) { // TODO : optimiser
+		
+		System.out.print("  |"); // Case vide en haut à gauche
+		
+		for(char i = 'A'; i < T[0].length + 'A' && i <= 'Z'; i++) { // Ligne des lettres MAJUSCULES
+			System.out.print(i + "|");
+		}
+		for(char i = 'a'; i < T[0].length + 'A' + 6 && i <= 'z'; i++) { // Ligne des lettres minuscules
+			System.out.print(i + "|");
+		}
+		System.out.println();
+		
+		for(int i = 0; i < T.length; i++) {
+			if(i < 10) System.out.print("0"); // Affichage des nombres sur le côté
+			System.out.print(i + "|");
+			
+			for(int j = 0; j < T[i].length; j++) { // Affichage cases :
+				
+				if(affMines == true && Tadj[i][j] == -1) { // Si mine et affMine true : "X"
+					System.out.print("X");
+				}
+				else {
+					if(T[i][j] == 0) System.out.print(" "); // non révélée
+					else if(T[i][j] == 1) System.out.print(Tadj[i][j]); // Révélée
+					else System.out.print("!"); // Drapeau
+				}
+				System.out.print("|");
+			}
+			System.out.println();
+		}
+		
+>>>>>>> 6f930fe4e6df0ad0dc2f214c5b5054c50aad7633
 		// Note : Dans un premier temps, considérer que la grille contiendra au plus 52 colonnes
 		// (une pour chaque lettre de l'alphabet en majuscule et minuscule) et au plus 100 lignes
 		// (entiers de 0 à 99).
@@ -208,7 +247,10 @@ public class projet_demineur {
 	public static void main(String[] args) {
 		init(8,52,2);
 		afficherGrille(false);
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 6f930fe4e6df0ad0dc2f214c5b5054c50aad7633
 
 	}
 
