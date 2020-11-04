@@ -30,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 // L'unique classe de votre projet
 public class projet_demineur {
-
+	
 	// Donné, utile pour la question 1.b]
 	public static int entierAleatoire(int a, int b){
 		// Renvoie un entier aléatoire uniforme entre a (inclus) et b (inclus).
@@ -56,15 +56,11 @@ public class projet_demineur {
 		
 		for(int mine = 0; mine < n; mine++) {  //Place n bombes al�atoirement dans le tableau Tadj
 			x = entierAleatoire(0, Tadj.length-1);
-			y = entierAleatoire(0, Tadj[0].length-1);
-		
-			for(int i = 0; i < Tadj.length; i++) {
-				for(int j = 0; j < Tadj[i].length-1; j++) {
-					if(i == x && j == y) {
-						Tadj[i][j] = -1;
-					}
-					}
-				}
+			y = entierAleatoire(0, Tadj[0].length-1); // (x, y) -> position aléatoire
+			
+			while(Tadj[x][y] != -1) {
+				Tadj[x][y] = -1;
+			}
 		}
 		
 		for(int i = 0; i < T.length; i++) { //just for printing, les cases avec -1 contiennent une bombe, 0 ne contient pas de bombes
@@ -165,7 +161,6 @@ public class projet_demineur {
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
 		init(10,10,2);
-		System.out.println(caseCorrecte(10,10));
 		
 
 	}
@@ -191,4 +186,3 @@ public class projet_demineur {
 	}
 
 }
-// Test modif
