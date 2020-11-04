@@ -42,7 +42,7 @@ public class projet_demineur {
 	// Exercice 1 : Initialisation des tableaux
 	//
 
-	// Question 1.a] déclarer les variables globales T et Tadj ici
+	// Question 1.a] dï¿½clarer les variables globales T et Tadj ici
 	static int[][] T; //Voici les variables globale
 	static int[][] Tadj;
 
@@ -54,7 +54,7 @@ public class projet_demineur {
 		int x = 0;
 		int y = 0;
 		
-		for(int mine = 0; mine < n; mine++) {  //Place n bombes aléatoirement dans le tableau Tadj
+		for(int mine = 0; mine < n; mine++) {  //Place n bombes alï¿½atoirement dans le tableau Tadj
 			x = entierAleatoire(0, Tadj.length-1);
 			y = entierAleatoire(0, Tadj[0].length-1);
 		
@@ -191,3 +191,4 @@ public class projet_demineur {
 	}
 
 }
+// Test modif
