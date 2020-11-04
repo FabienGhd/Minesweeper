@@ -97,7 +97,10 @@ public class projet_demineur {
 		
 		System.out.print("  |"); // Case vide en haut à gauche
 		
-		for(char i = 'A'; i < T.length + 'A'; i++) { // Ligne des lettres
+		for(char i = 'A'; i < T[0].length + 'A' && i <= 'Z'; i++) { // Ligne des lettres MAJUSCULES
+			System.out.print(i + "|");
+		}
+		for(char i = 'a'; i < T[0].length + 'A' + 6 && i <= 'z'; i++) { // Ligne des lettres minuscules
 			System.out.print(i + "|");
 		}
 		System.out.println();
@@ -191,7 +194,7 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
-		init(10,10,2);
+		init(8,52,2);
 		afficherGrille(false);
 
 	}
