@@ -127,13 +127,13 @@ public class projet_demineur {
 
 				for(int j = 0; j < T[i].length; j++) { // Affichage cases :
 
-					if(affMines == true && Tadj[i][j] == -1) { // Si mine et affMine true : "X"
-						System.out.print("X");
+					if(affMines == true && Tadj[i][j] == -1) { // Si mine et affMine true : "!"
+						System.out.print("!");
 					}
 					else {
 						if(T[i][j] == 0) System.out.print(" "); // non révélée
 						else if(T[i][j] == 1) System.out.print(Tadj[i][j]); // Révélée
-						else System.out.print("!"); // Drapeau
+						else System.out.print("X"); // Drapeau
 					}
 					System.out.print("|");
 				}
@@ -147,13 +147,22 @@ public class projet_demineur {
 	//
 
 	// Question 3.a]
-	public static void caseAdjacenteZero() { // ATTENTION, vous devez modifier la signature de cette fonction
+	public static boolean caseAdjacenteZero(int i, int j) { //on considère i et j valides
 		
-		
+		for(int x = i-1; x <= i+1; x++) {
+			for(int y = j-1; j <= j+1; y++) {
+				if(T[x][y] == 1 && Tadj[x][y] == 0) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	// Question 3.b]
-	public static void revelation() { // ATTENTION, vous devez modifier la signature de cette fonction
+	public static void revelation(int i, int j) {
+		T[i][j] = 1; // case révélée
+		
 		
 
 	}
@@ -206,8 +215,8 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* mÃ©thode main
 	public static void main(String[] args) {
-		init(8,52,2);
-		afficherGrille(false);
+		init(8,8,5);
+		afficherGrille(true);
 		
 
 	}
