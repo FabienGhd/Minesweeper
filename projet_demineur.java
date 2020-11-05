@@ -151,20 +151,29 @@ public class projet_demineur {
 		
 		for(int x = i-1; x <= i+1; x++) {
 			for(int y = j-1; j <= j+1; y++) {
-				if(T[x][y] == 1 && Tadj[x][y] == 0) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
+				if(T[x][y] == 1 && Tadj[x][y] == 0 && caseCorrecte(x, y)) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
 					return true;
 				}
 			}
 		}
 		return false;
+	
 	}
 
 	// Question 3.b]
-	public static void revelation(int i, int j) {
+	public static void revelation(int i, int j) { //on considère i et j valides 
+		//A COMPLETER
 		T[i][j] = 1; // case révélée
 		
-		
-
+		if(Tadj[i][j] == 0) { // la case n'a (i,j) n'a aucune mine adjacente
+			for(int x = i-1; x <= i+1; x++) { 
+			for(int y = j-1; j <= j+1; y++) {
+				if(Tadj[x][y] == 0 && T[x][y] == 0 && caseCorrecte(x, y)) {  
+					T[x][y] = 1; //révèle case adjacente à (i, j) qui n'ont pas de mine adjacente
+				}
+			}
+		}
+		}
 	}
 
 
@@ -215,9 +224,9 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* mÃ©thode main
 	public static void main(String[] args) {
-		init(8,8,5);
+		init(8,8,1);
 		afficherGrille(true);
-		
+		System.out.println(caseAdjacenteZero(5,5));
 
 	}
 
