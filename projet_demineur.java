@@ -151,7 +151,7 @@ public class projet_demineur {
 		
 		for(int x = i-1; x <= i+1; x++) {
 			for(int y = j-1; j <= j+1; y++) {
-				if(T[x][y] == 1 && Tadj[x][y] == 0 && caseCorrecte(x, y)) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
+				if(caseCorrecte(x,y) && T[x][y] == 1 && Tadj[x][y] == 0) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
 					return true;
 				}
 			}
@@ -162,7 +162,7 @@ public class projet_demineur {
 
 	// Question 3.b]
 	public static void revelation(int i, int j) { //on considère i et j valides 
-		//A COMPLETER
+		
 		T[i][j] = 1; // case révélée
 		
 		if(Tadj[i][j] == 0) { // la case n'a (i,j) n'a aucune mine adjacente
@@ -184,13 +184,29 @@ public class projet_demineur {
 	}
 
 	// Question 3.d]
-	public static void actionDrapeau() { // ATTENTION, vous devez modifier la signature de cette fonction
-		
+	public static void actionDrapeau(int i, int j) { 
+		if(!caseCorrecte(i, j)) {
+			System.out.println("Les coordonnées rentrées en paramètre de la fonction 'actionDrapeau' ne sont pas valides !");
+		}
+		if(T[i][j] != 1) { //case (i,j) -> non révélé (l'état de la case peut être 0 ou 2)
+			if(T[i][j] == 2) { //si la case est marqué par un drapeau
+				T[i][j] = 0;   //on enlève ce-dernier
+			} else {
+				T[i][j] = 2; //dans le cas où l'état de la case est 0, on met un drapeau
+			}
+		}
 	}
 	
 	
 	// Question 3.e]
-	public static void revelerCase() { // ATTENTION, vous devez modifier la signature de cette fonction
+	public static boolean revelerCase(int i, int j) { 
+		if(Tadj[i][j] == -1) {
+			return false;
+		} else {
+			revelation(i,j);
+			return true;
+		}
+		
 		
 	}
 
@@ -200,12 +216,41 @@ public class projet_demineur {
 	//
 
 	// Question 4.a]
-	public static void aGagne() {
+	public static boolean aGagne() {
+		int mine = 0;
+		int cpt = 0;
+		//comptons le nombre de mines dans une grille :
 		
-	}
+		for(int i = 0; i < T.length; i++) {
+			for(int j = 0; j < T[i].length; j++) {
+				if(Tadj[i][j] == -1) {
+					mine++;
+				}
+			}
+		}
+			//nous connaisons maintenant le nombre de mines, qui est contenu dans la variable 'mine'
+			//Assurons-nous dès à présent que toutes les cases sont révélé hormis les cases contenant des mines : 
+			
+			for(int i = 0; i < T.length; i++) {
+				for(int j = 0; j < T[i].length; j++) {
+					if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqué par un drapeau et est bien une mine
+					   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est révélée est n'est pas une mine
+						cpt++;
+					}
+				}
+			} return cpt == (T.length*T[0].length) - mine;
+		}
+	
 
 	// Question 4.b]
-	public static void verifierFormat() { // ATTENTION, vous devez modifier la signature de cette fonction
+	public static boolean verifierFormat(String s) { // ATTENTION, vous devez modifier la signature de cette fonction
+		if(s.length() != 4) {
+			return false;
+		} else {
+			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') {
+				return false;
+			}
+		}
 		
 		
 	}
@@ -224,9 +269,9 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* mÃ©thode main
 	public static void main(String[] args) {
-		init(8,8,1);
+		init(10,10,2);
 		afficherGrille(true);
-		System.out.println(caseAdjacenteZero(5,5));
+		
 
 	}
 
