@@ -1,28 +1,28 @@
-// Ceci est un squelette Ã  REMPLIR pour le projet INF1 sur le jeu de dÃ©mineur
+// Ceci est un squelette à REMPLIR pour le projet INF1 sur le jeu de démineur
 //
 // - N'oubliez pas de renseigner vos deux noms
-// PrÃ©nom Nom Groupe : Ã©lÃ¨ve 1/2
-// PrÃ©nom Nom Groupe Ã©lÃ¨ve 2/2
+// Prénom Nom Groupe : élève 1/2
+// Prénom Nom Groupe élève 2/2
 //
-// - Pour chaque question, le squelette donne le nom de la fonction Ã  Ã©crire mais *pas* la signature
-//   il faut remplir les types d'entrÃ©es et de sorties (indiquÃ©s par ?) et remplir l'intÃ©rieur du code de chaque fonction.
+// - Pour chaque question, le squelette donne le nom de la fonction à écrire mais *pas* la signature
+//   il faut remplir les types d'entrées et de sorties (indiqués par ?) et remplir l'intérieur du code de chaque fonction.
 //
-// - L'unique fichier de code que vous soumettrez sera ce fichier Java, donc n'hÃ©sitez pas Ã  le commenter abondamment.
+// - L'unique fichier de code que vous soumettrez sera ce fichier Java, donc n'hésitez pas à le commenter abondamment.
 //   inutile d'exporter votre projet comme archive Zip et de rendre ce zip.
-//   Optionnel : vous pouvez aussi joindre un document PDF donnant des explications supplÃ©mentaires (si vous utilisez OpenOffice/LibreOffice/Word, exportez le document en PDF), avec Ã©ventuellement des captures d'Ã©cran montrant des Ã©tapes affichÃ©es dans la console
+//   Optionnel : vous pouvez aussi joindre un document PDF donnant des explications supplémentaires (si vous utilisez OpenOffice/LibreOffice/Word, exportez le document en PDF), avec éventuellement des captures d'écran montrant des étapes affichées dans la console
 //
 // - Regardez en ligne sur le Moodle pour le reste des consignes, et dans le fichier PDF du sujet du projet
 //   https://foad.univ-rennes1.fr/mod/assign/view.php?id=534254
 //
-// - A rendre avant le vendredi 04 dÃ©cembre, maximum 23h59.
+// - A rendre avant le vendredi 04 décembre, maximum 23h59.
 //
 // - ATTENTION Le projet est assez long, ne commencez pas au dernier moment !
 //
-// - Enfin, n'hÃ©sitez pas Ã  contacter l'Ã©quipe pÃ©dagogique, en posant une question sur le forum du Moodle, si quelque chose n'est pas clair.
+// - Enfin, n'hésitez pas à contacter l'équipe pédagogique, en posant une question sur le forum du Moodle, si quelque chose n'est pas clair.
 //
 
-// Pour utiliser des scanners pour lire des entrÃ©es depuis le clavier
-// utilisÃ©s en questions 4.d] pour la fonction jeu()
+// Pour utiliser des scanners pour lire des entrées depuis le clavier
+// utilisés en questions 4.d] pour la fonction jeu()
 import java.util.Scanner;
 //Projet demineur INF1 de Axel HOMERY et Fabien GUIHARD - groupe 6B
 
@@ -32,9 +32,9 @@ import java.util.concurrent.ThreadLocalRandom;
 // L'unique classe de votre projet
 public class projet_demineur {
 
-	// DonnÃ©, utile pour la question 1.b]
+	// Donné, utile pour la question 1.b]
 	public static int entierAleatoire(int a, int b){
-		// Renvoie un entier alÃ©atoire uniforme entre a (inclus) et b (inclus).
+		// Renvoie un entier aléatoire uniforme entre a (inclus) et b (inclus).
 		return ThreadLocalRandom.current().nextInt(a, b + 1);
 	}
 
@@ -43,7 +43,7 @@ public class projet_demineur {
 	// Exercice 1 : Initialisation des tableaux
 	//
 
-	// Question 1.a] déclarer les variables globales T et Tadj ici
+	// Question 1.a] d?clarer les variables globales T et Tadj ici
 	static int[][] T; //Voici les variables globale
 	static int[][] Tadj;
 
@@ -52,31 +52,24 @@ public class projet_demineur {
 		
 		T = new int[h][l];
 		Tadj = new int[h][l];
-		int x = 0;
-		int y = 0;
+		int x = entierAleatoire(0, Tadj.length-1);
+		int y = entierAleatoire(0, Tadj[0].length-1);
 		
 		for(int mine = 0; mine < n; mine++) {  //Place n bombes aleatoirement dans le tableau Tadj
-			x = entierAleatoire(0, Tadj.length-1);
-			y = entierAleatoire(0, Tadj[0].length-1); // (x, y) -> position aléatoire
-
-			while(Tadj[x][y] != -1) {
-				Tadj[x][y] = -1;
+			while(Tadj[x][y] == -1) { // Tant que la pos tirée est une bombe, on tire à nouveau un pos au hasard
+				x = entierAleatoire(0, Tadj.length-1);
+				y = entierAleatoire(0, Tadj[0].length-1);
 			}
-		}
-		
-		for(int i = 0; i < T.length; i++) { //just for printing, les cases avec -1 contiennent une bombe, 0 ne contient pas de bombes
-			for(int j = 0; j < T[i].length; j++) {
-				System.out.print(Tadj[i][j] + " ");
-			}System.out.println();
+			Tadj[x][y] = -1;
 		}
 	}
 
 	// Question 1.c] Fonction caseCorrecte
 	public static boolean caseCorrecte(int i, int j) { 
-		if((T.length < i && i > 0) || (T[0].length < j && j > 0)) {
-			return false;
+		if((i >= 0 && i < T.length) && (j >= 0 && j < T[0].length)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	// Question 1.d] Fonction calculerAdjacent
@@ -85,11 +78,10 @@ public class projet_demineur {
 		for(int i = 0; i < Tadj.length; i++) {   
 			for(int j = 0; j < Tadj[i].length; j++) {  //the double for loop examines each element of the 2D array 
 				if(Tadj[i][j] != -1) {                 //skipping if the element of the array is a bomb.
-					
 					for(int x = i-1; x <= i+1; x++) {       // examine les lignes autour de l'element du tableau
 						for(int y = j-1; y <= j+1; y++) {  //examine les colonnes autour de l'element
 							
-							if(Tadj[x][y] == -1 && caseCorrecte(x, y)) {  //l'appel a la fonction evite de sortir du tableau
+							if(caseCorrecte(x, y) && Tadj[x][y] == -1) {  //l'appel a la fonction evite de sortir du tableau
 								Tadj[i][j]++;
 							}
 						}
@@ -106,12 +98,12 @@ public class projet_demineur {
 	// Question 2.a]
 	public static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
 
-		// Note : Dans un premier temps, considÃ©rer que la grille contiendra au plus 52 colonnes
+		// Note : Dans un premier temps, considérer que la grille contiendra au plus 52 colonnes
 		// (une pour chaque lettre de l'alphabet en majuscule et minuscule) et au plus 100 lignes
-		// (entiers de 0 Ã  99).
+		// (entiers de 0 à 99).
 		
 
-			System.out.print("  |"); // Case vide en haut à gauche
+			System.out.print("  |"); // Case vide en haut ? gauche
 
 			for(char i = 'A'; i < T[0].length + 'A' && i <= 'Z'; i++) { // Ligne des lettres MAJUSCULES
 				System.out.print(i + "|");
@@ -122,7 +114,7 @@ public class projet_demineur {
 			System.out.println();
 
 			for(int i = 0; i < T.length; i++) {
-				if(i < 10) System.out.print("0"); // Affichage des nombres sur le côté
+				if(i < 10) System.out.print("0"); // Affichage des nombres sur le cote
 				System.out.print(i + "|");
 
 				for(int j = 0; j < T[i].length; j++) { // Affichage cases :
@@ -131,8 +123,8 @@ public class projet_demineur {
 						System.out.print("!");
 					}
 					else {
-						if(T[i][j] == 0) System.out.print(" "); // non révélée
-						else if(T[i][j] == 1) System.out.print(Tadj[i][j]); // Révélée
+						if(T[i][j] == 0) System.out.print(" "); // non revele
+						else if(T[i][j] == 1) System.out.print(Tadj[i][j]); // Revele
 						else System.out.print("X"); // Drapeau
 					}
 					System.out.print("|");
@@ -143,15 +135,15 @@ public class projet_demineur {
 
 
 	//
-	// Exercice 3 : RÃ©vÃ©ler une case
+	// Exercice 3 : Révéler une case
 	//
 
 	// Question 3.a]
-	public static boolean caseAdjacenteZero(int i, int j) { //on considère i et j valides
-		
+	public static boolean caseAdjacenteZero(int i, int j) { //on consid?re i et j valides
+
 		for(int x = i-1; x <= i+1; x++) {
-			for(int y = j-1; j <= j+1; y++) {
-				if(caseCorrecte(x,y) && T[x][y] == 1 && Tadj[x][y] == 0) { //vérifie si une case adjacente par rapport à la position (i,j) est révélée et si la case n'a pas de mine adjacentes
+			for(int y = j-1; y <= j+1; y++) {
+				if(caseCorrecte(x,y) && T[x][y] == 1 && Tadj[x][y] == 0) { //v?rifie si une case adjacente par rapport ? la position (i,j) est r?v?l?e et si la case n'a pas de mine adjacentes
 					return true;
 				}
 			}
@@ -161,18 +153,25 @@ public class projet_demineur {
 	}
 
 	// Question 3.b]
-	public static void revelation(int i, int j) { //on considère i et j valides 
+	public static void revelation(int i, int j) { //on consid?re i et j valides 
 		
-		T[i][j] = 1; // case révélée
+		boolean oneIsRevealed = true;
+		T[i][j] = 1; // case r?v?l?e
 		
-		if(Tadj[i][j] == 0) { // la case n'a (i,j) n'a aucune mine adjacente
-			for(int x = i-1; x <= i+1; x++) { 
-			for(int y = j-1; j <= j+1; y++) {
-				if(Tadj[x][y] == 0 && T[x][y] == 0 && caseCorrecte(x, y)) {  
-					T[x][y] = 1; //révèle case adjacente à (i, j) qui n'ont pas de mine adjacente
+		while(oneIsRevealed == true) {
+			oneIsRevealed = false;
+			if(Tadj[i][j] == 0) {
+				for(int k = 0; k < T.length; k++) { // Parcours grille
+					for(int l = 0; l < T[k].length; l++) {
+						if(caseAdjacenteZero(k, l) && T[k][l] == 0) {
+							T[k][l] = 1;
+							oneIsRevealed = true;
+						}
+						else {
+						}
+					}
 				}
 			}
-		}
 		}
 	}
 
@@ -186,13 +185,13 @@ public class projet_demineur {
 	// Question 3.d]
 	public static void actionDrapeau(int i, int j) { 
 		if(!caseCorrecte(i, j)) {
-			System.out.println("Les coordonnées rentrées en paramètre de la fonction 'actionDrapeau' ne sont pas valides !");
+			System.out.println("Les coordonn?es rentr?es en param?tre de la fonction 'actionDrapeau' ne sont pas valides !");
 		}
-		if(T[i][j] != 1) { //case (i,j) -> non révélé (l'état de la case peut être 0 ou 2)
-			if(T[i][j] == 2) { //si la case est marqué par un drapeau
-				T[i][j] = 0;   //on enlève ce-dernier
+		if(T[i][j] != 1) { //case (i,j) -> non r?v?l? (l'?tat de la case peut ?tre 0 ou 2)
+			if(T[i][j] == 2) { //si la case est marqu? par un drapeau
+				T[i][j] = 0;   //on enl?ve ce-dernier
 			} else {
-				T[i][j] = 2; //dans le cas où l'état de la case est 0, on met un drapeau
+				T[i][j] = 2; //dans le cas o? l'?tat de la case est 0, on met un drapeau
 			}
 		}
 	}
@@ -229,12 +228,12 @@ public class projet_demineur {
 			}
 		}
 			//nous connaisons maintenant le nombre de mines, qui est contenu dans la variable 'mine'
-			//Assurons-nous dès à présent que toutes les cases sont révélé hormis les cases contenant des mines : 
+			//Assurons-nous d?s ? pr?sent que toutes les cases sont r?v?l? hormis les cases contenant des mines : 
 			
 			for(int i = 0; i < T.length; i++) {
 				for(int j = 0; j < T[i].length; j++) {
-					if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqué par un drapeau et est bien une mine
-					   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est révélée est n'est pas une mine
+					if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
+					   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
 						cpt++;
 					}
 				}
@@ -267,11 +266,19 @@ public class projet_demineur {
 	}
 
 	// Question 4.e]
-	// Votre *unique* mÃ©thode main
+	// Votre *unique* méthode main
 	public static void main(String[] args) {
-		init(10,10,2);
+		init(10,10,3);
+		calculerAdjacent();
 		afficherGrille(true);
-		
+		revelation(0, 0);
+		afficherGrille(true);
+		//for(int i =0; i < Tadj.length; i++) {
+		//	for(int j =0; j < Tadj[i].length; j++) {
+		//		System.out.print(Tadj[i][j] + " ");
+		//	}
+		//	System.out.println();
+		//}
 
 	}
 
