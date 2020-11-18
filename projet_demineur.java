@@ -246,17 +246,56 @@ public class projet_demineur {
 		if(s.length() != 4) {
 			return false;
 		} else {
-			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') {
-				return false;
+			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') return false;
+			
+			//vérification chiffre indice 1 et 2
+			int cpt = 0;
+			for(int i = '0' ; i <= '9'; i++) {
+				if(s.charAt(1) == i) cpt++;
+				if(s.charAt(2) ==  i) cpt++;
+			} if(cpt != 2) return false;
+			
+			//vérification lettre indice 3
+			
+			for(int i = 'A'; i <= 'Z'; i++) {
+				if(s.charAt(3) == i) return true;
 			}
+			for(int i = 'a'; i <= 'z'; i++) {
+				if(s.charAt(3) == i) return true;
+			}
+			
+			return false;
 		}
 		
 		
 	}
 
 	// Question 4.c]
-	public static void conversionCoordonnees() { // ATTENTION, vous devez modifier la signature de cette fonction
+	public static int[] conversionCoordonnees(String input) { // ATTENTION, vous devez modifier la signature de cette fonction
+		int[] t = new int[3];
+	
+		if(input.charAt(0) == 'r') t[2] = 1;
+		else t[2] = 0;
 		
+		//Transformation du caractère lettre en chiffre pour la colonne :
+		int cpt = 0;
+		for(int i = 'A'; i <= 'Z'; i++) {
+			if(input.charAt(3) == i) {
+				t[1] = cpt;
+			} cpt++;
+		} 
+		cpt = 26;
+		for(int i = 'a'; i <= 'z'; i++) {
+			if(input.charAt(3) == i) {
+				t[1] = cpt;
+			} cpt++;
+		} 
+		//Transformation du caractère correspondant à la ligne en son entier :
+		t[0] = Integer.parseInt(input.substring(1,3));
+		for(int i = 0; i < t.length; i++) {
+			System.out.print(t[i] + ", ");
+		}
+		return t;
 		
 	}
 
@@ -268,7 +307,8 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
-		init(10,10,3);
+		/*
+		init(10,25,3);
 		calculerAdjacent();
 		afficherGrille(true);
 		revelation(0, 0);
@@ -279,7 +319,42 @@ public class projet_demineur {
 		//	}
 		//	System.out.println();
 		//}
-
+		conversionCoordonnees("r02F");
+		*/
+		
+	
+		//4.e]
+		
+		Scanner sc = new Scanner (System.in);
+		
+		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
+		int hauteur = sc.nextInt();
+		//vérification de la hauteur rentrée :
+		if(hauteur < 1 || hauteur > 100) {
+			System.out.print("La hauteur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 100 inclus :");
+			hauteur = sc.nextInt();
+		}
+		System.out.print("Veuillez entrer la largeur de la grille de jeu : ");
+		int largeur = sc.nextInt();
+		//Vérification de la largeur rentrée
+		if(largeur < 1 || largeur > 52)	{
+			System.out.print("La largeur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 52 inclus :");
+			largeur = sc.nextInt();
+		}
+		
+		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu : "); 
+			int mine = sc.nextInt();
+			if(mine < 1 || mine > hauteur*largeur) {
+				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez rentrée de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' inclus");
+				mine = sc.nextInt();
+			}
+		sc.close();
+		//Les dimensions et le nombre de mines sont valides.
+		init(hauteur, largeur, mine); //Initialisation de la grille
+		calculerAdjacent(); 
+		jeu();
+		//RAJOUTER LES REGLES DE BASE POUR L'UTILISATEUR COMME D POUR DRAPEAU ETC
+		
 	}
 
 
