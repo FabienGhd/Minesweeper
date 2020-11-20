@@ -185,9 +185,9 @@ public class projet_demineur {
 	// Question 3.d]
 	public static void actionDrapeau(int i, int j) { 
 		if(!caseCorrecte(i, j)) {
-			System.out.println("Les coordonn?es rentr?es en param?tre de la fonction 'actionDrapeau' ne sont pas valides !");
+			System.out.println("Les coordonnees rentrees en parametre de la fonction 'actionDrapeau' ne sont pas valides !");
 		}
-		if(T[i][j] != 1) { //case (i,j) -> non r?v?l? (l'?tat de la case peut ?tre 0 ou 2)
+		else if(T[i][j] != 1) { //case (i,j) -> non r?v?l? (l'?tat de la case peut ?tre 0 ou 2)
 			if(T[i][j] == 2) { //si la case est marqu? par un drapeau
 				T[i][j] = 0;   //on enl?ve ce-dernier
 			} else {
@@ -227,26 +227,28 @@ public class projet_demineur {
 				}
 			}
 		}
-			//nous connaisons maintenant le nombre de mines, qui est contenu dans la variable 'mine'
-			//Assurons-nous d?s ? pr?sent que toutes les cases sont r?v?l? hormis les cases contenant des mines : 
-			
-			for(int i = 0; i < T.length; i++) {
-				for(int j = 0; j < T[i].length; j++) {
-					if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
-					   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
-						cpt++;
-					}
+		//nous connaisons maintenant le nombre de mines, qui est contenu dans la variable 'mine'
+		//Assurons-nous d?s ? pr?sent que toutes les cases sont r?v?l? hormis les cases contenant des mines : 
+		
+		for(int i = 0; i < T.length; i++) {
+			for(int j = 0; j < T[i].length; j++) {
+				if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
+				   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
+					cpt++;
 				}
-			} return cpt == (T.length*T[0].length) - mine;
-		}
+			}
+		} 
+		return cpt == (T.length*T[0].length) - mine;
+	}
 	
 
 	// Question 4.b]
 	public static boolean verifierFormat(String s) { // ATTENTION, vous devez modifier la signature de cette fonction
 		if(s.length() != 4) {
 			return false;
-		} else {
-			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') return false;
+		} 
+		else {
+			if(s.charAt(0) != 'r' || s.charAt(0) != 'd') return false;
 			
 			//vérification chiffre indice 1 et 2
 			int cpt = 0;
@@ -262,12 +264,9 @@ public class projet_demineur {
 			}
 			for(int i = 'a'; i <= 'z'; i++) {
 				if(s.charAt(3) == i) return true;
-			}
-			
-			return false;
+			}						
 		}
-		
-		
+		return false;		
 	}
 
 	// Question 4.c]
@@ -301,7 +300,34 @@ public class projet_demineur {
 
 	// Question 4.d]
 	public static void jeu() {
+		boolean perdu = false;
+		Scanner sc = new Scanner(System.in);
+		String input;
+		int[] coords;
 		
+		while(!aGagne() && !perdu) {
+			afficherGrille(false);
+			
+			System.out.println("Entrez les coordonnees souhaitées  :  ");
+			input = sc.nextLine();
+			
+			while(!verifierFormat(input)) {
+				System.out.println("Le format des coordonnees que vous avez entrees n'est pas bon, veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
+				System.out.println("Entrez les coordonnées souhaitées  :  ");
+				input = sc.nextLine();
+			}
+			coords = conversionCoordonnees(input);
+			
+			if(coords[2] == 0) {
+				if(!revelerCase(coords[0], coords[1])) perdu = true; 	//  Si case choisie = bombe
+				else revelerCase(coords[0], coords[1]);					//  Si case pas bombe
+			}
+			else actionDrapeau(coords[0], coords[1]);					//  Si placer drapeau
+			
+		}
+		
+		if(aGagne()) System.out.println("Gagné !");	// Si on est sorti du while car le joueur a gagné
+		else System.out.println("Perdu...")		
 	}
 
 	// Question 4.e]
@@ -353,7 +379,7 @@ public class projet_demineur {
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
 		jeu();
-		//RAJOUTER LES REGLES DE BASE POUR L'UTILISATEUR COMME D POUR DRAPEAU ETC
+		// TODO : RAJOUTER LES REGLES DE BASE POUR L'UTILISATEUR COMME D POUR DRAPEAU ETC
 		
 	}
 
