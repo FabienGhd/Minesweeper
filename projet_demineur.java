@@ -215,7 +215,7 @@ public class projet_demineur {
 	//
 
 	// Question 4.a]
-	public static boolean aGagne() {
+	public static boolean aGagne() {  //  TODO: modifier car joueur gagne quand grille remplie de bombe
 		int mine = 0;
 		int cpt = 0;
 		//comptons le nombre de mines dans une grille :
@@ -248,7 +248,7 @@ public class projet_demineur {
 			return false;
 		} 
 		else {
-			if(s.charAt(0) != 'r' || s.charAt(0) != 'd') return false;
+			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') return false;
 			
 			//vérification chiffre indice 1 et 2
 			int cpt = 0;
@@ -297,6 +297,7 @@ public class projet_demineur {
 		return t;
 		
 	}
+	
 
 	// Question 4.d]
 	public static void jeu() {
@@ -308,50 +309,38 @@ public class projet_demineur {
 		while(!aGagne() && !perdu) {
 			afficherGrille(false);
 			
-			System.out.println("Entrez les coordonnees souhaitées  :  ");
+			System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
 			input = sc.nextLine();
 			
 			while(!verifierFormat(input)) {
 				System.out.println("Le format des coordonnees que vous avez entrees n'est pas bon, veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
-				System.out.println("Entrez les coordonnées souhaitées  :  ");
+				System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
 				input = sc.nextLine();
 			}
 			coords = conversionCoordonnees(input);
 			
-			if(coords[2] == 0) {
-				if(!revelerCase(coords[0], coords[1])) perdu = true; 	//  Si case choisie = bombe
-				else revelerCase(coords[0], coords[1]);					//  Si case pas bombe
+			if(coords[2] == 1) {  //  Si joueur veut reveler case
+				if(!revelerCase(coords[0], coords[1])) { 	//  Si case choisie = bombe -> perdu
+					perdu = true;
+					afficherGrille(true);  					// Affiche grille avec bombes
+				}
+				else revelerCase(coords[0], coords[1]);		//  Si case pas bombe
 			}
-			else actionDrapeau(coords[0], coords[1]);					//  Si placer drapeau
+			else actionDrapeau(coords[0], coords[1]);		//  Si placer drapeau
 			
 		}
-		
+		sc.close();
 		if(aGagne()) System.out.println("Gagné !");	// Si on est sorti du while car le joueur a gagné
-		else System.out.println("Perdu...")		
+		else System.out.println("Perdu...");
 	}
 
 	// Question 4.e]
 	// Votre *unique* méthode main
-	public static void main(String[] args) {
-		/*
-		init(10,25,3);
-		calculerAdjacent();
-		afficherGrille(true);
-		revelation(0, 0);
-		afficherGrille(true);
-		//for(int i =0; i < Tadj.length; i++) {
-		//	for(int j =0; j < Tadj[i].length; j++) {
-		//		System.out.print(Tadj[i][j] + " ");
-		//	}
-		//	System.out.println();
-		//}
-		conversionCoordonnees("r02F");
-		*/
-		
+	public static void main(String[] args) {	
 	
 		//4.e]
 		
-		Scanner sc = new Scanner (System.in);
+		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
 		int hauteur = sc.nextInt();
@@ -374,7 +363,6 @@ public class projet_demineur {
 				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez rentrée de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' inclus");
 				mine = sc.nextInt();
 			}
-		sc.close();
 		//Les dimensions et le nombre de mines sont valides.
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
