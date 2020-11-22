@@ -153,10 +153,10 @@ public class projet_demineur {
 	}
 
 	// Question 3.b]
-	public static void revelation(int i, int j) { //on consid?re i et j valides 
+	public static void revelation(int i, int j) { //on considere i et j valides 
 		
 		boolean oneIsRevealed = true;
-		T[i][j] = 1; // case r?v?l?e
+		T[i][j] = 1; // case revelee
 		
 		while(oneIsRevealed == true) {
 			oneIsRevealed = false;
@@ -177,9 +177,20 @@ public class projet_demineur {
 
 
 	// Question 3.c] Optionnel
-	public static void relevation2() { // ATTENTION, vous devez modifier la signature de cette fonction
-		
-	
+	public static void revelation2(int i, int j) { //on ne considere pas i et j valides 	//	 TODO : A tester
+		if(caseCorrecte(i, j)) {
+			T[i][j] = 1;
+			
+			if(Tadj[i][j] == 0) {
+				for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
+					for(int y = j-1; y <= j+1; y++) {
+						if(caseCorrecte(x, y)) {
+							revelation(x, y);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// Question 3.d]
@@ -202,7 +213,7 @@ public class projet_demineur {
 		if(Tadj[i][j] == -1) {
 			return false;
 		} else {
-			revelation(i,j);
+			revelation2(i,j);
 			return true;
 		}
 		
