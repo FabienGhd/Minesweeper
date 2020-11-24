@@ -302,9 +302,7 @@ public class projet_demineur {
 		} 
 		//Transformation du caractère correspondant à la ligne en son entier :
 		t[0] = Integer.parseInt(input.substring(1,3));
-		for(int i = 0; i < t.length; i++) {
-			System.out.print(t[i] + ", ");
-		}
+		
 		return t;
 		
 	}
@@ -355,6 +353,7 @@ public class projet_demineur {
 		
 		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
 		int hauteur = sc.nextInt();
+		
 		//vérification de la hauteur rentrée :
 		if(hauteur < 1 || hauteur > 100) {
 			System.out.print("La hauteur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 100 inclus :");
@@ -378,10 +377,13 @@ public class projet_demineur {
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
 		jeu();
+		
+		sc.close();
 		// TODO : RAJOUTER LES REGLES DE BASE POUR L'UTILISATEUR COMME D POUR DRAPEAU ETC
 		
+		
 	}
-
+	
 
 	//
 	// Exercice 5 bonus challenge : Pour aller plus loin
@@ -389,7 +391,37 @@ public class projet_demineur {
 
 	// Question 5.a] Optionnel
 	public static void aide() {
-		
+		/*
+		Scanner sc = new Scanner(System.in);
+		// TODO : A INTEGRER DANS LE JEU 
+		System.out.print("A INTEGRER DANS LE JEU, tapez : ");
+		String s = sc.nextLine();
+		if(s.charAt(0) == 'a' && s.charAt(1) == 'i' && s.charAt(2) == 'd' && s.charAt(3) == 'e') { 
+			System.out.println("Vous semblez avoir besoin d'aide... Laissez nous vous vous aider ! ");
+			//parcourons le tableau
+			for(int i = 0; i < Tadj.length; i++) {
+				for(int j = 0; j < Tadj[i].length; j++) {
+					
+					//première aide
+					if(Tadj[i][j] == 3 && T[i][j] == 1) { //si la case de position (i,j) est révélée et possède 3 mines adjacentes.
+						//parourons ces cases adjacentes :
+						int revealed = 0;
+						for(int x = i-1; x <= i+1; x++) {
+							for(int y = j-1; j <= j+1; j++) {
+								if(T[i][j] == 1 && Tadj[i][j] != 1) revealed++; //si une case adjacente est révélée et n'est pas une mine		
+								}
+							} 
+						if(revealed == 5) {
+							System.out.println("Reperez dans votre grille la case qui a 3 mines adjacentes et 3 cases adjacentes non révélées");
+							System.out.println("AIDE : Ces 3 cases adjacentes non révélées restantes sont toutes des mines ! Vous pouvez ainsi marquer ces cases d'un drapeau !");
+						}
+					}
+					System.out.println("Nous ne pouvons pas apporter d'aide pour l'instant...");
+				}	
+			}
+	
+		}
+	*/	
 	}
 
 	// Question 5.b] Optionnel
