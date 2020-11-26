@@ -161,10 +161,10 @@ public class projet_demineur {
 		while(oneIsRevealed == true) {
 			oneIsRevealed = false;
 			if(Tadj[i][j] == 0) {
-				for(int k = 0; k < T.length; k++) { // Parcours grille
-					for(int l = 0; l < T[k].length; l++) {
-						if(caseAdjacenteZero(k, l) && T[k][l] == 0) {
-							T[k][l] = 1;
+				for(int x = 0; x < T.length; x++) { // Parcours grille
+					for(int y = 0; y < T[x].length; j++) {
+						if(caseAdjacenteZero(x, y) && T[x][y] == 0) {
+							T[x][y] = 1;
 							oneIsRevealed = true;
 						}
 						else {
@@ -243,7 +243,7 @@ public class projet_demineur {
 		
 		for(int i = 0; i < T.length; i++) {
 			for(int j = 0; j < T[i].length; j++) {
-				if((T[i][j] == 2 && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
+				if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
 				   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
 					cpt++;
 				}
@@ -325,7 +325,7 @@ public class projet_demineur {
 			input = sc.nextLine();
 			
 			while(!verifierFormat(input)) {
-				System.out.println("Le format des coordonnees que vous avez entrees n'est pas bon, veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
+				System.out.println("Le format des coordonnees que vous avez entré n'est pas bon, veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
 				System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
 				input = sc.nextLine();
 			}
@@ -351,39 +351,52 @@ public class projet_demineur {
 	public static void main(String[] args) {	
 	
 		//4.e]
-		
+		boolean correct = false;
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
 		int hauteur = sc.nextInt();
-		
-		// TODO : ajouter boucles while car : si mauvais format 2 fois -> on sort du if
 		//vérification de la hauteur rentrée :
+		while(!correct) { //boucle while -> permet de réitérer la demande jusqu'à ce que les coordonnées soient correctes
 		if(hauteur < 1 || hauteur > 100) {
 			System.out.print("La hauteur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 100 inclus :");
 			hauteur = sc.nextInt();
+		} else correct = true;
 		}
+		correct = false;
+		
+		
 		System.out.print("Veuillez entrer la largeur de la grille de jeu : ");
 		int largeur = sc.nextInt();
 		//Vérification de la largeur rentrée
+		while(!correct) {
 		if(largeur < 1 || largeur > 52)	{
 			System.out.print("La largeur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 52 inclus :");
 			largeur = sc.nextInt();
+		} else correct = true;
 		}
+		correct = false;
+		
 		
 		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu : "); 
 			int mine = sc.nextInt();
+			while(!correct) {
 			if(mine < 1 || mine > hauteur*largeur) {
 				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez rentrée de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' inclus");
 				mine = sc.nextInt();
+			} else correct = true;
 			}
-		//Les dimensions et le nombre de mines sont valides.
+		//Les dimensions et le nombre de mines sont maintenant valides.
+			
+	
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
+		System.out.println("AFIN DE JOUER : rentrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
+		System.out.println("Bon jeu !");
 		jeu();
 		
 		sc.close();
-		// TODO : RAJOUTER LES REGLES DE BASE POUR L'UTILISATEUR COMME D POUR DRAPEAU ETC
+		
 		
 		
 	}
