@@ -76,12 +76,14 @@ public class projet_demineur {
 	public static void calculerAdjacent() {
 		
 		for(int i = 0; i < Tadj.length; i++) {   
-			for(int j = 0; j < Tadj[i].length; j++) {  //the double for loop examines each element of the 2D array 
-				if(Tadj[i][j] != -1) {                 //skipping if the element of the array is a bomb.
+			for(int j = 0; j < Tadj[i].length; j++) {  //parcours grille
+				
+				if(Tadj[i][j] != -1) {                 //passe si l'élement est une bombe.
+					
 					for(int x = i-1; x <= i+1; x++) {       // examine les lignes autour de l'element du tableau
 						for(int y = j-1; y <= j+1; y++) {  //examine les colonnes autour de l'element
 							
-							if(caseCorrecte(x, y) && Tadj[x][y] == -1) {  //l'appel a la fonction evite de sortir du tableau
+							if(caseCorrecte(x, y) && Tadj[x][y] == -1) {  //l'appel a la fonction 'caseCorrcte' evite de sortir du tableau
 								Tadj[i][j]++;
 							}
 						}
@@ -174,24 +176,22 @@ public class projet_demineur {
 			}
 		}
 	}
-
+	//Le programme utilise revelation2 du fait de sa complexité plus optimisé.
 
 	// Question 3.c] Optionnel
-	public static void revelation2(int i, int j) { //on ne considere pas i et j valides 	//	 TODO : A tester
-		if(caseCorrecte(i, j)) {
-			T[i][j] = 1;
-			
-			if(Tadj[i][j] == 0) {
-				for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
-					for(int y = j-1; y <= j+1; y++) {
-						if(caseCorrecte(x, y)) {
-							revelation(x, y);
-						}
-					}
-				}
-			}
-		}
-	}
+	public static void revelation2(int i, int j) { // Fonction récursive
+        T[i][j] = 1;
+
+        if(Tadj[i][j] == 0) {
+            for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
+                for(int y = j-1; y <= j+1; y++) {
+                    if(caseCorrecte(x, y) && T[x][y] == 0) { // Si case dans grille && non révélée (nécéssaire au bon fonctionnement de la récursivité)
+                        revelation2(x, y);
+                    }
+                }
+            }
+        }
+    }
 
 	// Question 3.d]
 	public static void actionDrapeau(int i, int j) { 
@@ -243,7 +243,7 @@ public class projet_demineur {
 		
 		for(int i = 0; i < T.length; i++) {
 			for(int j = 0; j < T[i].length; j++) {
-				if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
+				if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||  //la case est marqu? par un drapeau ou est révélé et est bien une mine
 				   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
 					cpt++;
 				}
@@ -304,7 +304,7 @@ public class projet_demineur {
 			} cpt++;
 		} 
 		//Transformation du caractère correspondant à la ligne en son entier :
-		t[0] = Integer.parseInt(input.substring(1,3));
+		t[0] = Integer.parseInt(input.substring(1,3)); //TODO : CHANGER SUBSTRING SI BESOIN
 		
 		return t;
 		
@@ -354,6 +354,7 @@ public class projet_demineur {
 		boolean correct = false;
 		Scanner sc = new Scanner(System.in);
 		
+		
 		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
 		int hauteur = sc.nextInt();
 		//vérification de la hauteur rentrée :
@@ -381,8 +382,8 @@ public class projet_demineur {
 		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu : "); 
 			int mine = sc.nextInt();
 			while(!correct) {
-			if(mine < 1 || mine > hauteur*largeur) {
-				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez rentrée de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' inclus");
+			if(mine < 1 || mine > hauteur*largeur-1) { // hauteur * largeur-1 car impossible de jouer si la grille est entièrement remplie de bombes
+				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez entrer de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' - 1 ");
 				mine = sc.nextInt();
 			} else correct = true;
 			}
@@ -392,6 +393,8 @@ public class projet_demineur {
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
 		System.out.println("AFIN DE JOUER : rentrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
+		System.out.println("exemple1 : r10F -> révèle case 2A ");
+		System.out.println("exemple 2 : d02A -> marquer ou enlever drapeau sur case 2A");
 		System.out.println("Bon jeu !");
 		jeu();
 		
