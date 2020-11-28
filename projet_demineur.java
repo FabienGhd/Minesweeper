@@ -158,7 +158,7 @@ public class projet_demineur {
 	public static void revelation(int i, int j) { //on considere i et j valides 
 		
 		boolean oneIsRevealed = true;
-		T[i][j] = 1; // case revelee
+		T[i][j] = 1; // case revelée
 		
 		while(oneIsRevealed == true) {
 			oneIsRevealed = false;
@@ -303,10 +303,22 @@ public class projet_demineur {
 				t[1] = cpt;
 			} cpt++;
 		} 
+		
 		//Transformation du caractère correspondant à la ligne en son entier :
-		t[0] = Integer.parseInt(input.substring(1,3)); //TODO : CHANGER SUBSTRING SI BESOIN
+		t[0] = Integer.parseInt(input.substring(1,3)); 
+		
+		/* Autre méthode sans utiliser la méthode substring : 
+		 
+		String res = new String();
+		for(int i = 1; i < 3; i++) {
+			res += s.charAt(i);
+		}
+		t[0] = Integer.parseInt(res);
+		
+		*/
 		
 		return t;
+		
 		
 	}
 	
@@ -390,8 +402,10 @@ public class projet_demineur {
 		//Les dimensions et le nombre de mines sont maintenant valides.
 			
 	
+			
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
+		//Donnons les informations indispensable à l'utilisateur afin qu'il puisse jouer : 
 		System.out.println("AFIN DE JOUER : rentrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
 		System.out.println("exemple1 : r10F -> révèle case 2A ");
 		System.out.println("exemple 2 : d02A -> marquer ou enlever drapeau sur case 2A");
