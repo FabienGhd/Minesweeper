@@ -76,12 +76,14 @@ public class projet_demineur {
 	public static void calculerAdjacent() {
 		
 		for(int i = 0; i < Tadj.length; i++) {   
-			for(int j = 0; j < Tadj[i].length; j++) {  //the double for loop examines each element of the 2D array 
-				if(Tadj[i][j] != -1) {                 //skipping if the element of the array is a bomb.
+			for(int j = 0; j < Tadj[i].length; j++) {  //parcours grille
+				
+				if(Tadj[i][j] != -1) {                 //passe si l'élement est une bombe.
+					
 					for(int x = i-1; x <= i+1; x++) {       // examine les lignes autour de l'element du tableau
 						for(int y = j-1; y <= j+1; y++) {  //examine les colonnes autour de l'element
 							
-							if(caseCorrecte(x, y) && Tadj[x][y] == -1) {  //l'appel a la fonction evite de sortir du tableau
+							if(caseCorrecte(x, y) && Tadj[x][y] == -1) {  //l'appel a la fonction 'caseCorrcte' evite de sortir du tableau
 								Tadj[i][j]++;
 							}
 						}
@@ -156,7 +158,7 @@ public class projet_demineur {
 	public static void revelation(int i, int j) { //on considere i et j valides 
 		
 		boolean oneIsRevealed = true;
-		T[i][j] = 1; // case revelee
+		T[i][j] = 1; // case revelée
 		
 		while(oneIsRevealed == true) {
 			oneIsRevealed = false;
@@ -174,24 +176,22 @@ public class projet_demineur {
 			}
 		}
 	}
-
+	//Le programme utilise revelation2 du fait de sa complexité plus optimisé.
 
 	// Question 3.c] Optionnel
-	public static void revelation2(int i, int j) { //on ne considere pas i et j valides 	//	 TODO : A tester
-		if(caseCorrecte(i, j)) {
-			T[i][j] = 1;
-			
-			if(Tadj[i][j] == 0) {
-				for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
-					for(int y = j-1; y <= j+1; y++) {
-						if(caseCorrecte(x, y)) {
-							revelation(x, y);
-						}
-					}
-				}
-			}
-		}
-	}
+	public static void revelation2(int i, int j) { // Fonction récursive
+        T[i][j] = 1;
+
+        if(Tadj[i][j] == 0) {
+            for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
+                for(int y = j-1; y <= j+1; y++) {
+                    if(caseCorrecte(x, y) && T[x][y] == 0) { // Si case dans grille && non révélée (nécéssaire au bon fonctionnement de la récursivité)
+                        revelation2(x, y);
+                    }
+                }
+            }
+        }
+    }
 
 	// Question 3.d]
 	public static void actionDrapeau(int i, int j) { 
@@ -243,10 +243,11 @@ public class projet_demineur {
 		
 		for(int i = 0; i < T.length; i++) {
 			for(int j = 0; j < T[i].length; j++) {
-				if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||   //la case est marqu? par un drapeau et est bien une mine
+				/*if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||  //la case est marqu? par un drapeau ou est révélé et est bien une mine
 				   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
 					cpt++;
-				}
+				}*/
+				if(T[i][j] == 1) cpt++;
 			}
 		} 
 		return cpt == (T.length*T[0].length) - mine;
@@ -257,7 +258,12 @@ public class projet_demineur {
 	public static boolean verifierFormat(String s) { // ATTENTION, vous devez modifier la signature de cette fonction
 		if(s.length() != 4) {
 			return false;
-		} 
+		}
+		// Fonction aide
+		else if(s.equals("aide")) {
+			aide();
+			return false;
+		}
 		else {
 			if(s.charAt(0) != 'r' && s.charAt(0) != 'd') return false;
 			
@@ -285,7 +291,6 @@ public class projet_demineur {
 		int[] t = new int[3];
 		
 		// Fonction aide
-		if(input.equals("aide")) aide();
 	
 		if(input.charAt(0) == 'r') t[2] = 1;
 		else t[2] = 0;
@@ -303,10 +308,22 @@ public class projet_demineur {
 				t[1] = cpt;
 			} cpt++;
 		} 
+		
 		//Transformation du caractère correspondant à la ligne en son entier :
-		t[0] = Integer.parseInt(input.substring(1,3));
+		t[0] = Integer.parseInt(input.substring(1,3)); 
+		
+		/* Autre méthode sans utiliser la méthode substring : 
+		 
+		String res = new String();
+		for(int i = 1; i < 3; i++) {
+			res += s.charAt(i);
+		}
+		t[0] = Integer.parseInt(res);
+		
+		*/
 		
 		return t;
+		
 		
 	}
 	
@@ -325,7 +342,7 @@ public class projet_demineur {
 			input = sc.nextLine();
 			
 			while(!verifierFormat(input)) {
-				System.out.println("Le format des coordonnees que vous avez entré n'est pas bon, veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
+				System.out.println("Le format des coordonnees que vous avez entré n'est pas bon (ou vous avez utilisé l'aide), veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
 				System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
 				input = sc.nextLine();
 			}
@@ -354,8 +371,9 @@ public class projet_demineur {
 		boolean correct = false;
 		Scanner sc = new Scanner(System.in);
 		
+		
 		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
-		int hauteur = sc.nextInt();
+		int hauteur = sc.nextInt(); // TODO : gestion d'erreur si valeur entrée n'est pas int
 		//vérification de la hauteur rentrée :
 		while(!correct) { //boucle while -> permet de réitérer la demande jusqu'à ce que les coordonnées soient correctes
 		if(hauteur < 1 || hauteur > 100) {
@@ -381,17 +399,21 @@ public class projet_demineur {
 		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu : "); 
 			int mine = sc.nextInt();
 			while(!correct) {
-			if(mine < 1 || mine > hauteur*largeur) {
-				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez rentrée de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' inclus");
+			if(mine < 1 || mine > hauteur*largeur-1) { // hauteur * largeur-1 car impossible de jouer si la grille est entièrement remplie de bombes
+				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez entrer de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' - 1 ");
 				mine = sc.nextInt();
 			} else correct = true;
 			}
 		//Les dimensions et le nombre de mines sont maintenant valides.
 			
 	
+			
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
+		//Donnons les informations indispensable à l'utilisateur afin qu'il puisse jouer : 
 		System.out.println("AFIN DE JOUER : rentrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
+		System.out.println("exemple1 : r10F -> révèle case 2A ");
+		System.out.println("exemple 2 : d02A -> marquer ou enlever drapeau sur case 2A");
 		System.out.println("Bon jeu !");
 		jeu();
 		
@@ -408,33 +430,61 @@ public class projet_demineur {
 
 	// Question 5.a] Optionnel
 	public static void aide() {
-		/*
-		// TODO : A INTEGRER DANS LE JEU 
-		System.out.println("Vous semblez avoir besoin d'aide... Laissez nous vous vous aider ! ");
+		
+		boolean helped = false;
+		int not_revealed;
+		int flag;
+		System.out.println("\nVous semblez avoir besoin d'aide... Laissez nous vous aider !");
+		System.out.println("Le système d'aide à la pose de drapeau est infaillible, mais celui qui vous permet de savoir quelles cases sont certaines de ne pas être des mines \nrepose sur votre"
+				+ "placement de drapeau. Donc si vous en avez placé un au mauvais endroit, l'aide sera inutile voire dangereuse\n");
 		//parcourons le tableau
 		for(int i = 0; i < Tadj.length; i++) {
 			for(int j = 0; j < Tadj[i].length; j++) {
 				
-				//première aide
-				if(T[i][j] == 1 && Tadj[i][j] > 1) { //si la case de position (i,j) est révélée et possède au moins 1 mines adjacente.
-					int revealed = 0;
-					//parourons ces cases adjacentes :
-					// TODO :ajouter vérif case dans tableau
-					for(int x = i-1; x <= i+1; x++) {
-						for(int y = j-1; j <= j+1; j++) {
-							if(T[i][j] == 1) revealed++; //si une case adjacente est révélée	
+				
+				if(T[i][j] == 1 && Tadj[i][j] >= 1) { // Si la case de position (i,j) est révélée et possède au moins 1 mines adjacente.
+					not_revealed = 0;
+					//revealed = -1; // Car dans la boucle suivante, on compte la case elle-même (qui est forcément révélée à cause/grace au if précédent)
+					flag = 0;
+					
+					// Collecte infos des cases adjacentes
+					for(int x = i-1; x <= i+1; x++) { // Parours case adjacentes
+						for(int y = j-1; y <= j+1; y++) {
+							if(caseCorrecte(x, y)) {
+								if(T[x][y] == 0) not_revealed++;
+								else if(T[x][y] == 2) flag++;		
 							}
-						} 
-					if(revealed == 8 - Tadj[i][j]) {
-						System.out.println("Les " + Tadj[i][j] + " cases autour de la case " + pos_case + " sont toutes des mines"); // Pour generaliser l'aide, pas se limiter à 3
-						System.out.println("Reperez dans votre grille la case qui a 3 mines adjacentes et 3 cases adjacentes non révélées");
-						System.out.println("AIDE : Ces 3 cases adjacentes non révélées restantes sont toutes des mines ! Vous pouvez ainsi marquer ces cases d'un drapeau !");
+						}
+					}
+					
+					// Première aide - Bombes (Si il y a autant de cases non révélées que de bombes autour de la case, toutes les cases adjacentes non révélées sont des bombes)
+					
+					// Si il y a autant de cases non révélées que de bombes autour de la case (on compte les drapeaux pour être certain que le joueur n'a pas déjà posé un drapeau)
+					// On précise
+					if(not_revealed + flag == Tadj[i][j] && not_revealed != 0) { 
+						// TODO : changer la phrase en fonction de si c'est singulier/pluriel ? (peut-etre trop compliqué)
+						// TODO : Ajouter (si pas trop compliqué) une fonction qui converti les positions numériques en positions adaptées (lettre et nombre)
+						helped = true;
+						System.out.println("[!] La/les " + Tadj[i][j] + " case(s) non révélée(s) autour de la case " + i + ", " + j + " sont toutes des mines");
+						}
+
+					// Deuxième aide - Drapeaux (Si il y a autant de drapeaux que de bombes adjacentes autour d'une case, toutes les cases non révélées sont safe
+					
+					// On précise que le nombre de case(s) non révélée(s) doit être supérieur ou égal à 1 (pas égal à 0 plus compacte)			
+					if(flag == Tadj[i][j] && not_revealed != 0) {
+						helped = true;
+						System.out.println("[X] La/les " + not_revealed + "case(s) autour de la case " + i + ", " + j + " (en dehors du/des drapeau(x) déjà positionné(s) ne sont pas des mines, "
+								+ "tu peux les révéler !");
 					}
 				}
-				System.out.println("Nous ne pouvons pas apporter d'aide pour l'instant...");
+				
+				
+				
 			}	
 		}
-		*/
+		if(!helped) System.out.println("Nous ne pouvons pas apporter d'aide pour l'instant...");
+		System.out.println();
+		
 		
 	
 	}
