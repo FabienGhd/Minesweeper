@@ -22,7 +22,9 @@
 //
 
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
-// utilisés en questions 4.d] pour la fonction jeu()
+// utilisés en questions 4.d] pour la fonction jeu()*
+
+//Projet demineur INF1 de Axel HOMERY et Fabien GUIHARD - groupe 6B
 import java.util.Scanner;
 //Projet demineur INF1 de Axel HOMERY et Fabien GUIHARD - groupe 6B
 
@@ -458,8 +460,6 @@ public class projet_demineur {
 					// Si il y a autant de cases non révélées que de bombes autour de la case (on compte les drapeaux pour être certain que le joueur n'a pas déjà posé un drapeau)
 					// On précise
 					if(not_revealed + flag == Tadj[i][j] && not_revealed != 0) { 
-						// TODO : changer la phrase en fonction de si c'est singulier/pluriel ? (peut-etre trop compliqué)
-						// TODO : Ajouter (si pas trop compliqué) une fonction qui converti les positions numériques en positions adaptées (lettre et nombre)
 						helped = true;
 						System.out.println("[!] La/les " + Tadj[i][j] + " case(s) non révélée(s) autour de la case " + i + ", " + j + " sont toutes des mines");
 						}
