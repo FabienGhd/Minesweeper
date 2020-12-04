@@ -176,14 +176,14 @@ public class projet_demineur {
 			}
 		}
 	}
-	//Le programme utilise revelation2 du fait de sa complexité plus optimisé.
+	//Le programme utilise revelation2 car de sa complexité est plus optimisé.
 
 	// Question 3.c] Optionnel
 	public static void revelation2(int i, int j) { // Fonction récursive
         T[i][j] = 1;
 
         if(Tadj[i][j] == 0) {
-            for(int x = i-1; x <= i+1; x++) {       // examine les cases collees
+            for(int x = i-1; x <= i+1; x++) {       // examine les cases adjacentes
                 for(int y = j-1; y <= j+1; y++) {
                     if(caseCorrecte(x, y) && T[x][y] == 0) { // Si case dans grille && non révélée (nécéssaire au bon fonctionnement de la récursivité)
                         revelation2(x, y);
@@ -226,7 +226,7 @@ public class projet_demineur {
 	//
 
 	// Question 4.a]
-	public static boolean aGagne() {  //  TODO: modifier car joueur gagne quand grille remplie de bombe
+	public static boolean aGagne() { 
 		int mine = 0;
 		int cpt = 0;
 		//comptons le nombre de mines dans une grille :
@@ -243,10 +243,6 @@ public class projet_demineur {
 		
 		for(int i = 0; i < T.length; i++) {
 			for(int j = 0; j < T[i].length; j++) {
-				/*if(((T[i][j] == 2 || T[i][j] == 0) && Tadj[i][j] == -1) ||  //la case est marqu? par un drapeau ou est révélé et est bien une mine
-				   (T[i][j] == 1 && Tadj[i][j] != -1)) {   //la case est r?v?l?e est n'est pas une mine
-					cpt++;
-				}*/
 				if(T[i][j] == 1) cpt++;
 			}
 		} 
@@ -338,12 +334,12 @@ public class projet_demineur {
 		while(!aGagne() && !perdu) {
 			afficherGrille(false);
 			
-			System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
+			System.out.print("Veuillez entrer les coordonnées souhaitées  :  ");
 			input = sc.nextLine();
 			
 			while(!verifierFormat(input)) {
-				System.out.println("Le format des coordonnees que vous avez entré n'est pas bon (ou vous avez utilisé l'aide), veuillez recommencer"); //TODO : changer si besoin les phrases, les alinéas..
-				System.out.print("Veuillez entrer les coordonnees souhaitées  :  ");
+				System.out.println("Le format des coordonnées que vous avez entré n'est pas bon (ou vous avez utilisé l'aide), veuillez recommencer..."); //TODO : changer si besoin les phrases, les alinéas..
+				System.out.print("Veuillez entrer les coordonnées souhaitées  :  ");
 				input = sc.nextLine();
 			}
 			coords = conversionCoordonnees(input);
@@ -372,35 +368,35 @@ public class projet_demineur {
 		Scanner sc = new Scanner(System.in);
 		
 		
-		System.out.print("Veuillez entrer la hauteur de la grille de jeu : ");
+		System.out.print("Veuillez entrer la hauteur de la grille de jeu à l'aide d'un entier : ");
 		int hauteur = sc.nextInt(); // TODO : gestion d'erreur si valeur entrée n'est pas int
 		//vérification de la hauteur rentrée :
 		while(!correct) { //boucle while -> permet de réitérer la demande jusqu'à ce que les coordonnées soient correctes
 		if(hauteur < 1 || hauteur > 100) {
-			System.out.print("La hauteur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 100 inclus :");
+			System.out.print("La hauteur entrée n'est pas conforme ! Veuillez entrer de nouveau la hauteur de la grille avec un entier compris entre 1 et 100 inclus :");
 			hauteur = sc.nextInt();
 		} else correct = true;
 		}
 		correct = false;
 		
 		
-		System.out.print("Veuillez entrer la largeur de la grille de jeu : ");
+		System.out.print("Veuillez entrer la largeur de la grille de jeu à l'aide d'un entier : ");
 		int largeur = sc.nextInt();
 		//Vérification de la largeur rentrée
 		while(!correct) {
 		if(largeur < 1 || largeur > 52)	{
-			System.out.print("La largeur rentrée n'est pas conforme ! Veuillez rentrée de nouveau la hauteur de la grille avec un entier compris entre 1 et 52 inclus :");
+			System.out.print("La largeur entrée n'est pas conforme ! Veuillez entrer de nouveau la hauteur de la grille avec un entier compris entre 1 et 52 inclus :");
 			largeur = sc.nextInt();
 		} else correct = true;
 		}
 		correct = false;
 		
 		
-		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu : "); 
+		System.out.print("Veuillez entrer le nombre de mine(s) dans le jeu à l'aide d'un entier : "); 
 			int mine = sc.nextInt();
 			while(!correct) {
-			if(mine < 1 || mine > hauteur*largeur-1) { // hauteur * largeur-1 car impossible de jouer si la grille est entièrement remplie de bombes
-				System.out.print("Le nombre de mine(s) rentrée n'est pas conforme ! Veuillez entrer de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' - 1 ");
+			if(mine < 1 || mine > hauteur*largeur-1) { // 'hauteur * largeur-1' car impossible de jouer si la grille est entièrement remplie de bombes
+				System.out.print("Le nombre de mine(s) entrée(s) n'est pas conforme ! Veuillez entrer de nouveau le nombre de mine(s) avec un entier compris entre 1 et la 'longeur*largeur' - 1 ");
 				mine = sc.nextInt();
 			} else correct = true;
 			}
@@ -411,9 +407,9 @@ public class projet_demineur {
 		init(hauteur, largeur, mine); //Initialisation de la grille
 		calculerAdjacent(); 
 		//Donnons les informations indispensable à l'utilisateur afin qu'il puisse jouer : 
-		System.out.println("AFIN DE JOUER : rentrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
-		System.out.println("exemple1 : r10F -> révèle case 2A ");
-		System.out.println("exemple 2 : d02A -> marquer ou enlever drapeau sur case 2A");
+		System.out.println("AFIN DE JOUER : entrer r (reveler) OU d (drapeau) PUIS le numéro de ligne (00 à 99) ET en dernier la lettre correspondant à la colonne (A à z)");
+		System.out.println("Exemple 1 : r10F -> révèle case 2A ");
+		System.out.println("Exemple 2 : d02A -> marquer ou enlever drapeau sur case 2A");
 		System.out.println("Bon jeu !");
 		jeu();
 		
